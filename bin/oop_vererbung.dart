@@ -43,7 +43,7 @@ class Katze extends Tiere implements CanClimbing {
   }
 }
 
-class Vogel extends Tiere implements CanFly {
+class Vogel extends Tiere  {
   Vogel(String name) : super(name);
 
   @override
@@ -56,10 +56,6 @@ class Vogel extends Tiere implements CanFly {
     print('Zwitscher');
   }
 
-  @override
-  void canfly() {
-    print('$name fliegt');
-  }
 }
 
 class Rotkelchen extends Vogel implements CanFly {
@@ -81,7 +77,7 @@ class Rotkelchen extends Vogel implements CanFly {
   }
 }
 
-class Adler extends Tiere implements CanFly {
+class Adler extends Vogel implements CanFly {
   Adler(String name) : super(name);
 
   @override
