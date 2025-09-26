@@ -1,7 +1,12 @@
+
+List<Tiere> meineTiere = [];
 abstract class Tiere {
   String name;
 
-  Tiere(this.name);
+  Tiere(this.name,){
+    meineTiere.add(this);
+  }
+
 
   void makeSound();
   void move() {}
@@ -114,36 +119,32 @@ class Fisch extends Tiere implements CanBreatheUnderWater {
   }
 }
 
-Vogel asmel = Vogel('asmel');
-Adler adler1 = Adler('heinz');
-Adler adler2 = Adler('hans');
-Adler adler3 = Adler('heino');
-Katze katz1 = Katze('Flauschi');
-Katze katz2 = Katze('sir Schnurzelot');
-Fisch fisch1 = Fisch('nemo');
-Fisch fisch2 = Fisch('dory');
-Rotkelchen rotkelchen1 = Rotkelchen('Piepsy');
 
-List<Tiere> meineTiere = [
-  asmel,
-  adler1,
-  adler2,
-  adler3,
-  katz1,
-  katz2,
-  fisch1,
-  fisch2,
-  rotkelchen1,
-];
+
+
 
 Object? globalFly() {
+  int anzahlFliegeVieh = 0;
   for (Tiere Tier in meineTiere) {
     if (Tier is CanFly) {
+      anzahlFliegeVieh= meineTiere.whereType<CanFly>().length; //Statt where mit dem typ suchen CanFly.
+
+      print(Tier.runtimeType);
       print(Tier.name);
     }
   }
+      print('Anzahl der fliegenden Geschöpfe der Welt $anzahlFliegeVieh');
 }
 
 void main() {
+  Vogel asmel = Vogel('asmel');
+  Adler adler1 = Adler('heinz');
+  Adler adler2 = Adler('hans');
+  Adler adler3 = Adler('heino');
+  Katze katz1 = Katze('Flauschi');
+  Katze katz2 = Katze('sir Schnurzelot');
+  Fisch fisch1 = Fisch('nemo');
+  Fisch fisch2 = Fisch('dory');
+  Rotkelchen rotkelchen1 = Rotkelchen('Piepsy');
   globalFly();
 }
