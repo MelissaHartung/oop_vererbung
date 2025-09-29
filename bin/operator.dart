@@ -51,11 +51,10 @@ void main() {
   Coinstack stack1 = Coinstack([1, 2, 3]);
   Coinstack stack2 = Coinstack([3, 5, 6]);
   Coinstack? stack3 = stack1 - stack2;
-  bool istStack1Kleiner = stack1 < stack2;
-  bool istStack1Groesser = stack1 > stack2;
-  bool istStack1Gleich = stack1 == stack2;
+  bool stack4 = stack1 < stack2;
+
   print(stack3);
-  print(istStack1Kleiner);
-  print(istStack1Groesser);
-  print(istStack1Gleich);
+  print(stack4);
+
+  print(stack1 == stack2);
 }
