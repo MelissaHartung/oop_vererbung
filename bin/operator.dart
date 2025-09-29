@@ -20,6 +20,10 @@ class Coinstack {
     return sum >= other.sum;
   }
 
+  @override
+  int get hashCode => _coins.hashCode;
+
+  @override
   bool operator ==(Object other) {
     return sum == other;
   }
