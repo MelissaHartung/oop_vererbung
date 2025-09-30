@@ -28,6 +28,7 @@ void main() {
         print("Magischer Schlag verursacht $damage Schaden");
         monster1.takeDamage(damage);
         break;
+
       case '3':
         damage = random.nextInt(10) + 10;
         print("Pfeil verursacht $damage Schaden");
