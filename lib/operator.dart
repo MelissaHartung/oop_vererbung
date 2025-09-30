@@ -1,21 +1,28 @@
+/// class of coins to lern operator
 class Coinstack {
-  List<int> _coins = [];
+  final List<int> _coins;
+
   Coinstack(this._coins);
 
-  @override
+  /// the sum of the list in [Coinstack]
   int get sum => _coins.fold(0, (a, b) => a + b);
+
+  /// Checks if the total value of this stack is less than the [other].
   bool operator <(Coinstack other) {
     return sum < other.sum;
   }
 
+  /// Checks if the total value of this stack is more than the [other].
   bool operator >(Coinstack other) {
     return sum > other.sum;
   }
 
+  /// Checks if the total value of this stack is less or the same than the [other].
   bool operator <=(Coinstack other) {
     return sum <= other.sum;
   }
 
+  /// Checks if the total value of this stack is more or the same than the [other].
   bool operator >=(Coinstack other) {
     return sum >= other.sum;
   }
@@ -28,21 +35,20 @@ class Coinstack {
     return sum == other;
   }
 
-  @override
+  /// Add the list with the other.
   Coinstack operator +(Coinstack other) {
     return Coinstack(_coins + other._coins);
   }
 
-  @override
+  /// Subtract the list index with the [other] an create a new object or return null.
   Coinstack? operator -(Coinstack other) {
     for (int coin in other._coins) {
       _coins.remove(coin);
       return Coinstack(_coins);
     }
-    ;
-    if (other._coins != _coins) {
-      return null;
-    }
+
+    if (other._coins != _coins) {}
+    return null;
   }
 
   @override

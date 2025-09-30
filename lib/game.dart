@@ -26,6 +26,8 @@ abstract class DamageableObject extends GameObject {
   /// The maximum health this object can have.
   int maxHealth;
   int _health;
+
+  /// The current health of the object.
   int get health => _health;
 
   /// Creates a new instance of a [DamageableObject].
@@ -62,6 +64,8 @@ abstract class DamageableObject extends GameObject {
 /// Represents the player in the game.
 class Player extends DamageableObject {
   int _score = 0;
+
+  /// The player's current total score.
   int get score => _score;
   int _livesremaining = 3;
 
@@ -108,10 +112,8 @@ class Monster extends DamageableObject {
     super.posX,
     super.posY,
     this.threatlevel,
-    String color,
-  ) {
-    this.color = color;
-  }
+    this.color,
+  );
 
   /// Makes the monster produce a sound.
   String makeNoise() {
