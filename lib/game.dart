@@ -1,26 +1,43 @@
 import 'dart:io';
 import 'dart:math';
 
+/// The base class for all objects that can exist in the game world.
+///
+/// Every [GameObject] has a [name] and a position ([posX], [posY]).
 class GameObject {
+  /// The display name of the game object.
   String name;
-  int PosX = 0;
-  int PosY = 0;
-  GameObject(this.name, this.PosX, this.PosY);
 
+  /// The object's position on the horizontal X-axis.
+  int posX = 0;
+
+  /// The object's position on the vertical Y-axis.
+  int posY = 0;
+
+  /// Creates a new instance of a [GameObject].
+  GameObject(this.name, this.posX, this.posY);
+
+  /// Called when the object is removed from the game.
   void despawn() {}
 }
 
+/// An abstract base class for any [GameObject] that can take damage.
 abstract class DamageableObject extends GameObject {
+  /// The maximum health this object can have.
   int maxHealth;
   int _health;
+  int get health => _health;
+
+  /// Creates a new instance of a [DamageableObject].
   DamageableObject(
     this.maxHealth,
     this._health,
     String name,
-    int PosX,
-    int PosY,
-  ) : super(name, PosX, PosY);
+    int posX,
+    int posY,
+  ) : super(name, posX, posY);
 
+  /// Checks if the object's health is at or below zero.
   bool isDead() {
     if (_health <= 0) {
       return true;
@@ -29,6 +46,7 @@ abstract class DamageableObject extends GameObject {
     }
   }
 
+  /// Reduces the object's health by the given [damage] amount.
   void takeDamage(int damage) {
     _health -= damage;
 
@@ -37,54 +55,71 @@ abstract class DamageableObject extends GameObject {
     }
   }
 
+  /// A callback method that is triggered when the object's health drops to zero.
   void onKilled() {}
 }
 
+/// Represents the player in the game.
 class Player extends DamageableObject {
   int _score = 0;
+  int get score => _score;
   int _livesremaining = 3;
-  Player(int maxHealth, int _health, String name, int PosX, int PosY)
-    : super(maxHealth, _health, name, PosX, PosY);
+
+  /// Creates a new [Player] instance.
+  Player(super.maxHealth, super._health, super.name, super.posX, super.posY);
+
+  /// Overrides the default behavior for when the player is killed.
+  /// Decrements lives and resets the player's position.
   @override
   void onKilled() {
     if (_livesremaining > 0) {
       _livesremaining--;
     }
-    PosX = 0;
-    PosY = 0;
+    posX = 0;
+    posY = 0;
   }
 
+  /// Adds a given amount of [score] to the player's total score.
   void addScore(int score) {
     _score += score;
     print('Score: $_score');
   }
 }
 
+/// A simple manager to hold global game state, like the current player.
 class GameManager {
+  /// A static reference to the current player instance.
   static Player? currentPlayer;
 }
 
+/// Represents a monster enemy in the game.
 class Monster extends DamageableObject {
+  /// The threat level of the monster, used for score calculation.
   int threatlevel = 0;
+
+  /// The color of the monster.
   String color = '';
+
+  /// Creates a new [Monster] instance with a specific threat level and color.
   Monster(
-    int maxHealth,
-    int _health,
-    String name,
-    int PosX,
-    int PosY,
-    int threatlevel,
+    super.maxHealth,
+    super._health,
+    super.name,
+    super.posX,
+    super.posY,
+    this.threatlevel,
     String color,
-  ) : super(maxHealth, _health, name, PosX, PosY) {
-    this.threatlevel = threatlevel;
+  ) {
     this.color = color;
   }
 
+  /// Makes the monster produce a sound.
   String makeNoise() {
     print('grrr');
     return 'grrr';
   }
 
+  /// Awards score to the player when the monster is killed.
   @override
   void onKilled() {
     print('$name wurde getötet');
@@ -92,66 +127,4 @@ class Monster extends DamageableObject {
       GameManager.currentPlayer!.addScore(threatlevel * 10);
     }
   }
-}
-
-void main() {
-  Monster monster1 = Monster(50, 50, 'Flauschi', 5, 5, 1, 'red');
-  Player player1 = Player(50, 50, 'Sir Schnurzelot', 0, 0);
-  GameManager.currentPlayer = player1;
-  Random random = Random();
-  bool gameRunning = true;
-  while (gameRunning) {
-    print("\nWähle eine Attacke");
-    print("1.Schwertschlag");
-    print("2 Magischer Schlag");
-    print("3. Pfeil");
-    print("4. Überrauschungsangriff");
-    String? eingabe = stdin.readLineSync();
-    int damage = 0;
-
-    switch (eingabe) {
-      case '1':
-        damage = random.nextInt(10) + 10;
-        print("Schwertschlag verursacht $damage Schaden");
-        monster1.takeDamage(damage);
-        break;
-      case '2':
-        damage = random.nextInt(10) + 10;
-        print("Magischer Schlag verursacht $damage Schaden");
-        monster1.takeDamage(damage);
-        break;
-      case '3':
-        damage = random.nextInt(10) + 10;
-        print("Pfeil verursacht $damage Schaden");
-        monster1.takeDamage(damage);
-        break;
-      case '4':
-        damage = random.nextInt(10) + 10;
-        print("Überrauschungsangriff verursacht $damage Schaden");
-        monster1.takeDamage(damage);
-        break;
-      default:
-        print('Ungültige Eingabe');
-    }
-    if (monster1.isDead()) {
-      print("${monster1.name} ist gestorben");
-      gameRunning = false;
-      break;
-    } else {
-      print("${monster1.name} hat noch ${monster1._health} Lebenspunkte");
-    }
-    int monsterDamage = random.nextInt(15) + 5;
-    print("Das Monster greift zurück und verursacht $monsterDamage Schaden");
-    player1.takeDamage(monsterDamage);
-
-    if (player1.isDead()) {
-      print("${player1.name} ist gestorben");
-      player1.onKilled();
-      gameRunning = false;
-      break;
-    } else {
-      print("${player1.name} hat noch ${player1._health} Lebenspunkte");
-    }
-  }
-  print(" Spiel beendet. Endscore: ${player1._score} Punkte");
 }
