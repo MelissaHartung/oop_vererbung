@@ -37,7 +37,7 @@ class Coinstack {
   Coinstack? operator -(Coinstack other) {
     for (int coin in other._coins) {
       _coins.remove(coin);
-      return Coinstack.new(_coins);
+      return Coinstack(_coins);
     }
     ;
     if (other._coins != _coins) {
