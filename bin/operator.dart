@@ -1,11 +1,28 @@
 /// class of coins to lern operator
 class Coinstack {
+  static const _coinValues = [1, 2, 5, 10, 20, 50, 100, 200];
   final List<int> _coins;
 
   Coinstack(this._coins);
 
   /// the sum of the list in [Coinstack]
   int get sum => _coins.fold(0, (a, b) => a + b);
+
+  int get summe1 {
+    var summe = 0;
+    for (var i = 0; i < _coins.length; i++) {
+      summe = summe + _coins[i];
+    }
+    return summe;
+  }
+
+  int get summe2 {
+    var summe = 0;
+    for (final coin in _coins) {
+      summe = summe + coin;
+    }
+    return summe;
+  }
 
   /// Checks if the total value of this stack is less than the [other].
   bool operator <(Coinstack other) {
@@ -28,16 +45,16 @@ class Coinstack {
   }
 
   @override
-  int get hashCode => _coins.hashCode;
-
-  @override
   bool operator ==(Object other) {
     return sum == other;
   }
 
+  @override
+  int get hashCode => _coins.hashCode;
+
   /// Add the list with the other.
   Coinstack operator +(Coinstack other) {
-    return Coinstack([sum + other.sum]);
+    return Coinstack([..._coins, ...other._coins]);
   }
 
   /// Subtract the list index with the [other] an create a new object or return null.
@@ -57,6 +74,17 @@ class Coinstack {
   String toString() {
     return _coins.toString();
   }
+
+  // addCoin(int value)
+  // addCoins(List<int> values)
+  // removeCoin(int value) [throws]
+  // removeCoins(List<int> values) [throws]
+  // bool containsCoin(int value)
+  // bool containsCoins(List<int> value)
+  // bool contains(Coinstack coinstack)
+  // bool canGiveValue(int value)
+  // void removeValue(int value) [throws]
+  // Alle Methoden wehren sich gg. ungültige Coin-Values [throwing]
 }
 
 void main() {
