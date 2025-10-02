@@ -64,5 +64,20 @@ void main() {
     return ergebnis;
   }
 
-  print(fakultaet2(7));
+  // print(fakultaet2(7));
+
+  for (int i = 0; i < 100; i++) {
+    if (i % 7 != 0) {
+      continue;
+    }
+    // print(i);
+  }
+
+  for (int i = 0; i < 5; i++) {
+    String zeile = "";
+    for (int j = 0; j < 5; j++) {
+      zeile = zeile + '*';
+    }
+    print(zeile);
+  }
 }
