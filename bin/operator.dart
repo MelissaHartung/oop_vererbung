@@ -3,7 +3,15 @@ class Coinstack {
   static const _coinValues = [1, 2, 5, 10, 20, 50, 100, 200];
   final List<int> _coins;
 
-  Coinstack(this._coins);
+  Coinstack(List<int> coins) : _coins = [] {
+    for (var coin in coins) {
+      if (!_coinValues.contains(coin)) {
+        //ist der wert nicht passend zu den werten in _coinvalues
+        throw ArgumentError('Ungültige Münze');
+      }
+      _coins.add(coin); //füge die der liste hinzu
+    }
+  }
 
   /// the sum of the list in [Coinstack]
   int get sum => _coins.fold(0, (a, b) => a + b);
@@ -129,7 +137,9 @@ class Coinstack {
     if (coin.length != other.coin.length) {
       return false;
     }
-    var coinstacksorted = [...coin]..sort();
+    var coinstacksorted = [
+      ...coin,
+    ]..sort(); //kopiert die listen mit spread operartor und cascade operator sortiert diese
     var coinstackOtherSorted = [...other.coin]..sort();
     for (int i = 0; i < coinstacksorted.length; i++) {
       if (coinstacksorted[i] != coinstackOtherSorted[i]) {
@@ -142,6 +152,48 @@ class Coinstack {
   bool canGiveValue(int value) {
     if (sum < value) {
       return false;
+    }
+    List<int> sortedcoins = List.from(coin)
+      ..sort((b, a) => a.compareTo(b)); //sortiere die liste und mach eine kopie
+    int rest = value;
+    for (int coin in sortedcoins) {
+      //für jede münze in der sortierten liste
+      if (coin <= rest) {
+        //ist der coin kleiner oder gleich dem rest value
+        rest -= coin; //ziehe diesen ab
+        if (rest == 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  void removeValue(int value) {
+    if (value > sum) {
+      throw ArgumentError('Nicht genug Geld');
+    }
+
+    List<int> sortedCoins = List.from(coin)
+      ..sort((b, a) => a.compareTo(b)); // von groß nach klein
+    int rest = value;
+    List<int> toRemove = [];
+
+    for (int c in sortedCoins) {
+      if (c <= rest) {
+        rest -=
+            c; // falls coin kleiner ist als restwert, soll er abziehen von coins
+        toRemove.add(c);
+        if (rest == 0) break;
+      }
+    }
+
+    if (rest > 0) {
+      throw ArgumentError('Nicht genug passende Münzen');
+    }
+
+    for (int c in toRemove) {
+      _coins.remove(c);
     }
   }
 }
@@ -157,21 +209,26 @@ class Coinstack {
 // Alle Methoden wehren sich gg. ungültige Coin-Values [throwing]
 
 void main() {
-  Coinstack stack1 = Coinstack([3, 5, 6]);
-  Coinstack stack4 = Coinstack([32, 243, 41, 3, 34, 4, 2, 3, 5, 4, 6, 7]);
-  Coinstack stack3 = Coinstack([2, 3, 4, 5, 6, 7, 243, 41, 3, 34, 4, 32]);
-  stack1.addcoin(90);
-  stack1.addCoins([10, 10, 10, 80]);
-  stack1.removeCoin(3);
-  stack1.removeCoins([10, 10, 10]);
-  stack1.containsCoin(10);
+  Coinstack stack1 = Coinstack([200, 50, 10]);
+  Coinstack stack4 = Coinstack([2, 2, 2, 5]);
+  // Coinstack stack3 = Coinstack([2, 3, 4, 5, 6, 7, 243, 41, 3, 34, 4, 32]);
+  // stack1.addcoin(90);
+  // stack1.addCoins([10, 10, 10, 80]);
+  // stack1.removeCoin(3);
+  // stack1.removeCoins([10, 10, 10]);
+  // stack1.containsCoin(10);
+  stack1.removeValue(200);
+  print(stack1);
+  print(stack4);
 
-  Coinstack stack2 = Coinstack([6, 3, 5]);
+  // Coinstack stack2 = Coinstack([6, 3, 5]);
 
   // print(stack3);
   // print(stack4);
-  print(stack1);
-  print(stack3.contains(stack4));
+  // print(stack1);
+  // print(stack3.contains(stack4));
+  // print(stack1.canGiveValue(140));
+
   // print(stack1.containsCoin(10));
   // print(stack1.containsCoins([10, 10, 10]));
 }
